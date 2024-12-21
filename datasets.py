@@ -134,16 +134,17 @@ class DatasetFromFolder(data.Dataset):
             # transforms.RandomVerticalFlip(),
             transforms.ToTensor()])
 
-
-        self.input_filenames = sorted(glob(join(data_dir, '*.jpg')))
-        self.ref_filenames = sorted(glob(join(ref_dir, '*/*.jpg')))
+        
+        self.input_filenames = sorted(os.listdir(data_dir))
+        self.ref_filenames = sorted(os.listdir(ref_dir))
         self.ref_len = len(self.ref_filenames)
         self.input_len = len(self.input_filenames)
-
+        
     def __getitem__(self, index):
-        input = load_img(self.input_filenames[index])
+        
+        input = load_img('/content/ST-VAE/train_data/content/' + self.input_filenames[index])
         rand_no = torch.randint(0, self.ref_len, (1,)).item()
-        ref = load_img(self.ref_filenames[rand_no])
+        ref = load_img('/content/ST-VAE/train_data/style/' + self.ref_filenames[rand_no])
 
 
         input = self.transform(input)
@@ -152,7 +153,7 @@ class DatasetFromFolder(data.Dataset):
         return input, ref
 
     def __len__(self):
-        return self.input_len
+        return min(self.ref_len,self.input_len)
 
 
 
