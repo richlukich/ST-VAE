@@ -21,7 +21,7 @@ parser.add_argument("--loss_network_dir", default='models/vgg_r51.pth', help='us
 parser.add_argument("--decoder_dir", default='models/dec_r41.pth', help='pre-trained decoder path')
 parser.add_argument('--pretrained', type=bool, default=True)
 parser.add_argument("--matrix_dir", default='model/matrix_r41_new.pth', help='pre-trained matrix path')
-parser.add_argument("--data_dir", default="train_data", help='path to training dataset')
+parser.add_argument("--data_dir", default="/content/ST-VAE/train_data", help='path to training dataset')
 parser.add_argument('--data_augmentation', type=bool, default=True)
 parser.add_argument('--threads', type=int, default=6, help='number of threads for data loader to use')
 parser.add_argument("--outf", default="output/", help='folder to output images and model checkpoints')
@@ -54,7 +54,7 @@ print_options(opt)
 
 ################# DATA #################
 print('===> Loading datasets')
-train_set = get_training_set(opt.data_dir, opt.data_augmentation)
+train_set = get_training_set(opt.data_dir)
 training_data_loader = DataLoader(dataset=train_set, num_workers=opt.threads, batch_size=opt.batchSize, shuffle=True)
 
 ################# MODEL #################
@@ -106,9 +106,10 @@ def train(epoch):
     epoch_loss = 0
 
     for iteration, batch in enumerate(training_data_loader, 1):
-        content, target, style = Variable(batch[0]), Variable(batch[1]), Variable(batch[2])
+        
+        content, style = Variable(batch[0]), Variable(batch[1])
         content = content.cuda()
-        target = target.cuda()
+        
         style = style.cuda()
 
         optimizer.zero_grad()
