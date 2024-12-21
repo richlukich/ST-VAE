@@ -1,6 +1,6 @@
 from os.path import join
 from torchvision import transforms
-from datasets import DatasetFromFolder, DatasetFromVideo
+from datasets import DatasetFromFolder
 from torch.utils.data import DataLoader
 
 
@@ -17,11 +17,11 @@ def transform():
 def get_training_set(data_dir):
     content_dir = data_dir + '/content'
     ref_dir = data_dir + '/style'
-    train_set = DatasetFromFolder(data_dir, ref_dir)
+    train_set = DatasetFromFolder(content_dir, ref_dir)
 
     # Pytorch train and test sets
     # tensor_dataset = torch.utils.data.TensorDataset(train_set)
-
+    
     return train_set
 
 
