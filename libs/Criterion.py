@@ -1,8 +1,6 @@
 import torch
 import torch.nn as nn
-from libs.laploss import LapLoss
 
-Lap_criterion = LapLoss(max_levels=4)
 
 class styleLoss(nn.Module):
     def forward(self,input,target):
